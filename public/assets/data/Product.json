@@ -1,0 +1,1078 @@
+[
+  {
+    "id": "1",
+    "category": "fashion",
+    "type": "table runner",
+    "name": "Table runner 3",
+    "new": true,
+    "sale": false,
+    "rate": 4,
+    "price": 4500,
+    "originPrice": 5500,
+    "brand": "gucci",
+    "sold": 12,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "variation": [
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png",
+      "4assets/images/product/bag-1.png"
+    ],
+    "description": "Keep your home organized, yet elegant with storage cabinets by Onita Patio Furniture. Traditionally designed, they are perfect to be used in the any place where you need to store.",
+    "action": "quick shop",
+    "slug": "mesh-shirt"
+  },
+  {
+    "id": "2",
+    "category": "fashion",
+    "type": "Kaftan",
+    "name": "Kaftan 1",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 2800,
+    "originPrice": 3600,
+    "brand": "hermes",
+    "sold": 23,
+    "quantity": 200,
+    "quantityPurchase": 1,
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "variation": [
+      {
+        "color": "white",
+        "colorCode": "#F6EFDD",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      },
+      {
+        "color": "purple",
+        "colorCode": "#8684D4",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png"
+    ],
+    "description": "Keep your home organized, yet elegant with storage cabinets by Onita Patio Furniture. Traditionally designed, they are perfect to be used in the any place where you need to store.",
+    "action": "quick shop",
+    "slug": "shirt"
+  },
+  {
+    "id": "3",
+    "category": "fashion",
+    "type": "pillow cover",
+    "name": "Pillow 1",
+    "new": false,
+    "sale": true,
+    "rate": 4,
+    "price": 320,
+    "originPrice": 460,
+    "brand": "zara",
+    "sold": 15,
+    "quantity": 80,
+    "quantityPurchase": 1,
+    "sizes": [
+      "freesize"
+    ],
+    "variation": [
+      {
+        "color": "pink",
+        "colorCode": "#F4407D",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      },
+      {
+        "color": "purple",
+        "colorCode": "#8684D4",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png"
+    ],
+    "description": "Keep your home organized, yet elegant with storage cabinets by Onita Patio Furniture. Traditionally designed, they are perfect to be used in the any place where you need to store.",
+    "action": "add to cart",
+    "slug": "blouse"
+  },
+  {
+    "id": "4",
+    "category": "fashion",
+    "type": "Kaftan",
+    "name": "Kaftan 2",
+    "new": false,
+    "sale": true,
+    "rate": 5,
+    "price": 2400,
+    "originPrice": 3200,
+    "brand": "adidas",
+    "sold": 14,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "M",
+      "L",
+      "XL"
+    ],
+    "variation": [
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      },
+      {
+        "color": "white",
+        "colorCode": "#F6EFDD",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      },
+      {
+        "color": "purple",
+        "colorCode": "#8684D4",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png"
+    ],
+    "description": "Keep your home organized, yet elegant with storage cabinets by Onita Patio Furniture. Traditionally designed, they are perfect to be used in the any place where you need to store.",
+    "action": "add to cart",
+    "slug": "kimono"
+  },
+  {
+    "id": "5",
+    "category": "fashion",
+    "type": "pillow cover",
+    "name": "Pillow 2",
+    "new": true,
+    "sale": false,
+    "rate": 4,
+    "price": 350,
+    "originPrice": 450,
+    "brand": "gucci",
+    "sold": 21,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "S",
+      "M",
+      "L",
+      "XL"
+    ],
+    "variation": [
+      {
+        "color": "black",
+        "colorCode": "#1F1F1F",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      },
+      {
+        "color": "purple",
+        "colorCode": "#8684D4",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-3.png",
+      "./assets/images/product/bag-3.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-3.png",
+      "./assets/images/product/bag-3.png",
+      "./assets/images/product/bag-3.png"
+    ],
+    "description": "Keep your home organized, yet elegant with storage cabinets by Onita Patio Furniture. Traditionally designed, they are perfect to be used in the any place where you need to store.",
+    "action": "quick shop",
+    "slug": "mesh-shirt"
+  },
+  {
+    "id": "6",
+    "category": "fashion",
+    "type": "sets",
+    "name": "Raglan Sleeve T-shirt",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 1800,
+    "originPrice": 2400,
+    "brand": "hermes",
+    "sold": 19,
+    "quantity": 200,
+    "quantityPurchase": 1,
+    "sizes": [
+      "XS",
+      "S",
+      "M",
+      "L",
+      "XL",
+      "2XL"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Keep your home organized, yet elegant with storage cabinets by Onita Patio Furniture. Traditionally designed, they are perfect to be used in the any place where you need to store.",
+    "action": "quick shop",
+    "slug": "shirt"
+  },
+  {
+    "id": "7",
+    "category": "fashion",
+    "type": "bedsheet",
+    "name": "Bedsheet 1",
+    "new": false,
+    "sale": true,
+    "rate": 4,
+    "price": 2300,
+    "originPrice": 3000,
+    "brand": "zara",
+    "sold": 22,
+    "quantity": 80,
+    "quantityPurchase": 1,
+    "sizes": [
+      "freesize"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      },
+      {
+        "color": "white",
+        "colorCode": "#F6EFDD",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      },
+      {
+        "color": "purple",
+        "colorCode": "#8684D4",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-1.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png",
+      "./assets/images/product/bag-1.png"
+    ],
+    "description": "Keep your home organized, yet elegant with storage cabinets by Onita Patio Furniture. Traditionally designed, they are perfect to be used in the any place where you need to store.",
+    "action": "add to cart",
+    "slug": "blouse"
+  },
+  {
+    "id": "161",
+    "category": "bedsheets",
+    "type": "Bedsheet",
+    "name": "Queen Size Bedsheet",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 1600,
+    "originPrice": 2000,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "90x108"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Queen Size Bedsheet (Parcale) is available.",
+    "action": "add to cart",
+    "slug": "queen-size-bedsheet"
+  },
+  {
+    "id": "162",
+    "category": "bedsheets",
+    "type": "Bedsheet",
+    "name": "King Size Bedsheet",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 1800,
+    "originPrice": 2400,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "108x108"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "King Size Bedsheet (Parcale) is available.",
+    "action": "add to cart",
+    "slug": "king-size-bedsheet"
+  },
+  {
+    "id": "163",
+    "category": "bedsheets",
+    "type": "Bedsheet",
+    "name": "Single Bedsheet",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 1200,
+    "originPrice": 1200,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "60X90"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Single Bedsheet is available.",
+    "action": "add to cart",
+    "slug": "single-bedsheet"
+  },
+  {
+    "id": "164",
+    "category": "towels",
+    "type": "towel",
+    "name": "Bath Towel",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 500,
+    "originPrice": 500,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "30x60"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Bath Towel is available.",
+    "action": "add to cart",
+    "slug": "bath-towel"
+  },
+  {
+    "id": "165",
+    "category": "towels",
+    "type": "towel",
+    "name": "Face Towel",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 350,
+    "originPrice": 550,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "20x30"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Face Towel is available.",
+    "action": "add to cart",
+    "slug": "face-towel"
+  },
+  {
+    "id": "166",
+    "category": "towels",
+    "type": "towel",
+    "name": "Towel Set (1 bath towel+ 2 face towels)",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 750,
+    "originPrice": 750,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Towel Set (1 bath towel+ 2 face towels) is available.",
+    "action": "add to cart",
+    "slug": "towel-set"
+  },
+  {
+    "id": "167",
+    "category": "dohar",
+    "type": "dohar",
+    "name": "Double Dohar",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 2500,
+    "originPrice": 2500,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "90x108"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Double Dohar is available.",
+    "action": "add to cart",
+    "slug": "double-dohar"
+  },
+  {
+    "id": "168",
+    "category": "dohar",
+    "type": "dohar",
+    "name": "Single Dohar (Pair)",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 3000,
+    "originPrice": 3000,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "60x90"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Single Dohar (Pair) is available.",
+    "action": "add to cart",
+    "slug": "single-dohar-pair"
+  },
+  {
+    "id": "169",
+    "category": "dohar",
+    "type": "dohar",
+    "name": "Single Dohar",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 1650,
+    "originPrice": 1650,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "60x90"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Single Dohar is available.",
+    "action": "add to cart",
+    "slug": "single-dohar"
+  },
+  {
+    "id": "170",
+    "category": "quilts",
+    "type": "quilt",
+    "name": "Double Quilt",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 3300,
+    "originPrice": 3300,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "90x108"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Double Quilt is available.",
+    "action": "add to cart",
+    "slug": "double-quilt"
+  },
+  {
+    "id": "171",
+    "category": "quilts",
+    "type": "quilt",
+    "name": "Single Quilt (Pair)",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 4500,
+    "originPrice": 4500,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "60x90"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Single Quilt (Pair) is available.",
+    "action": "add to cart",
+    "slug": "single-quilt-pair"
+  },
+  {
+    "id": "172",
+    "category": "quilts",
+    "type": "quilt",
+    "name": "Single Quilt",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 2500,
+    "originPrice": 2500,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [
+      "60x90"
+    ],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Single Quilt is available.",
+    "action": "add to cart",
+    "slug": "single-quilt"
+  },
+  {
+    "id": "173",
+    "category": "quilts",
+    "type": "quilt",
+    "name": "Baby Quilt",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 1250,
+    "originPrice": 1250,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Baby Quilt is available.",
+    "action": "add to cart",
+    "slug": "baby-quilt"
+  },
+  {
+    "id": "174",
+    "category": "table range",
+    "type": "table",
+    "name": "Mat set with runner (13 Pc. Set)",
+    "new": true,
+    "sale": false,
+    "rate": 5,
+    "price": 1400,
+    "originPrice": 1400,
+    "brand": "SHUBHA KUTEER",
+    "sold": 0,
+    "quantity": 100,
+    "quantityPurchase": 1,
+    "sizes": [],
+    "variation": [
+      {
+        "color": "green",
+        "colorCode": "#D2EF9A",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "red",
+        "colorCode": "#DB4444",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      },
+      {
+        "color": "yellow",
+        "colorCode": "#ECB018",
+        "colorImage": "./assets/images/product/color/48x48.png",
+        "image": "./assets/images/product/bag-2.png"
+      }
+    ],
+    "thumbImage": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "images": [
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png",
+      "./assets/images/product/bag-2.png"
+    ],
+    "description": "Mat set with runner (13 Pc. Set) is available.",
+    "action": "add to cart",
+    "slug": "mat-set-with-runner"
+  }
+]
