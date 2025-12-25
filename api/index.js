@@ -330,15 +330,21 @@ export default async function handler(req, res) {
                         // Determine thumb_image (first image from gallery, then main_image, else null)
                         const finalThumbImage = parsedGallery.length > 0 ? parsedGallery[0] : (main_image || null);
 
-                        // Prepare the SQL query and values
+
+                        // Manual ID generation as requested: "check the last items id and just add one"
+                        const [maxIdRows] = await pool.default.query("SELECT MAX(id) as maxId FROM products");
+                        const nextId = (maxIdRows[0].maxId || 0) + 1;
+
+                        // Prepare the SQL query and values including the explicit ID
                         const sql = `
                             INSERT INTO products
-                            (name, slug, price, origin_price, quantity, sold, rate,
+                            (id, name, slug, price, origin_price, quantity, sold, rate,
                             is_new, on_sale, category, description, type, brand,
                             main_image, thumb_image, gallery, sizes, variations, action)
-                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                         `;
                         const values = [
+                            nextId,
                             name,
                             productSlug,
                             parseFloat(price) || 0.00, // Ensure it's a float, default to 0.00
@@ -362,23 +368,18 @@ export default async function handler(req, res) {
 
                         // Log the data before insertion for debugging
                         console.log('Product data to insert:', {
-                            name, slug: productSlug, price: values[2], origin_price: values[3],
-                            quantity: values[4], sold: values[5], rate: values[6],
-                            is_new: values[7], on_sale: values[8], category: values[9],
-                            description: values[10], type: values[11], brand: values[12],
-                            main_image: values[13], thumb_image: values[14], gallery: values[15],
-                            sizes: values[16], variations: values[17], action: values[18]
+                            id: nextId, name, slug: productSlug, price: values[3], origin_price: values[4]
                         });
 
                         // Execute the insert query
-                        const [result] = await pool.default.query(sql, values);
+                        await pool.default.query(sql, values);
 
                         return res.status(201).json({
                             success: true,
                             message: 'Product added successfully!',
-                            productId: result.insertId,
+                            productId: nextId,
                             insertedProduct: { // Return some of the data for confirmation
-                                id: result.insertId,
+                                id: nextId,
                                 name: name,
                                 slug: productSlug,
                                 category: category,
