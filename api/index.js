@@ -398,6 +398,115 @@ export default async function handler(req, res) {
                     }
                 }
 
+                // GET single product by ID
+                if (pathname.startsWith('/api/admin/products/') && req.method === 'GET' && pathname !== '/api/admin/products') {
+                    const id = pathname.split('/').pop();
+                    const [rows] = await pool.default.query("SELECT * FROM products WHERE id = ?", [id]);
+                    if (rows.length === 0) {
+                        return res.status(404).json({ message: "Product not found" });
+                    }
+                    return res.status(200).json(rows[0]);
+                }
+
+                // PUT update product
+                 if (pathname.startsWith('/api/admin/products/') && req.method === 'PUT') {
+                    const id = pathname.split('/').pop();
+                    try {
+                        const {
+                            name, category, type, price, origin_price, quantity, sold, rate,
+                            brand, description, sizes, variations, gallery, main_image,
+                            is_new, on_sale, slug, action
+                        } = req.body;
+
+                        if (!name || !category || !price) {
+                            return res.status(400).json({
+                                success: false,
+                                error: 'Missing required fields: name, category, price'
+                            });
+                        }
+
+                         // --- Parsing logic (Duplicated for availability) ---
+                        let parsedVariations = {};
+                        if (variations) {
+                            try {
+                                const variationsData = typeof variations === 'string' ? JSON.parse(variations) : variations;
+                                if (typeof variationsData === 'object' && Object.keys(variationsData).length > 0) {
+                                    parsedVariations = variationsData;
+                                }
+                            } catch (e) { console.error('Error parsing variations:', e); }
+                        }
+
+                        let parsedSizes = [];
+                        if (sizes) {
+                            try {
+                                parsedSizes = typeof sizes === 'string' ? JSON.parse(sizes) : sizes;
+                                if (!Array.isArray(parsedSizes)) parsedSizes = [];
+                            } catch (e) { console.error('Error parsing sizes:', e); }
+                        }
+
+                        let parsedGallery = [];
+                        if (gallery) {
+                            try {
+                                parsedGallery = typeof gallery === 'string' ? JSON.parse(gallery) : gallery;
+                                if (!Array.isArray(parsedGallery)) parsedGallery = [];
+                            } catch (e) { console.error('Error parsing gallery:', e); }
+                        }
+
+                        const productSlug = slug && slug.trim() !== '' ? slug : name.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]+/g, "");
+                        const finalThumbImage = parsedGallery.length > 0 ? parsedGallery[0] : (main_image || null);
+
+                        const sql = `
+                            UPDATE products SET
+                            name=?, slug=?, price=?, origin_price=?, quantity=?, sold=?, rate=?,
+                            is_new=?, on_sale=?, category=?, description=?, type=?, brand=?,
+                            main_image=?, thumb_image=?, gallery=?, sizes=?, variations=?, action=?
+                            WHERE id=?
+                        `;
+                         const values = [
+                            name,
+                            productSlug,
+                            parseFloat(price) || 0.00,
+                            parseFloat(origin_price) || null,
+                            parseInt(quantity) || 0,
+                            parseInt(sold) || 0,
+                            parseFloat(rate) || 0.0,
+                            Boolean(is_new) ? 1 : 0,
+                            Boolean(on_sale) ? 1 : 0,
+                            category,
+                            description || null,
+                            type || null,
+                            brand || null,
+                            main_image || null,
+                            finalThumbImage,
+                            JSON.stringify(parsedGallery),
+                            JSON.stringify(parsedSizes),
+                            JSON.stringify(parsedVariations),
+                            action || 'add to cart',
+                            id // Where clause
+                        ];
+
+                        const [result] = await pool.default.query(sql, values);
+
+                        if (result.affectedRows === 0) {
+                             return res.status(404).json({ message: "Product not found or no changes made." });
+                        }
+
+                        return res.status(200).json({
+                            success: true,
+                            message: 'Product updated successfully!',
+                            productId: id
+                        });
+
+                    } catch (error) {
+                        console.error('Product update error:', error);
+                        return res.status(500).json({
+                            success: false,
+                            error: 'Failed to update product',
+                            details: error.message
+                        });
+                    }
+                }
+
                 // DELETE product
                 if (pathname.startsWith('/api/admin/products/') && req.method === 'DELETE') {
                     const id = pathname.split('/').pop();

@@ -902,11 +902,19 @@
             const form = document.getElementById("addProductForm");
             const msgDiv = document.getElementById("form-message");
 
+            const urlParams = new URLSearchParams(window.location.search);
+            const editProductId = urlParams.get('id');
+
+            if (editProductId) {
+                document.querySelector('h3').textContent = 'Edit Product';
+                document.querySelector('.breadcrumbs .text-tiny:last-child').textContent = 'Edit product';
+                // Wait for categories to load before fully populating? Or just run in parallel.
+                // We'll call loadProductData after initial setup.
+            }
+
             // Helper to show message
             function showMessage(text, type = 'success') {
                 msgDiv.innerHTML = `<span class="${type === 'success' ? 'text-success' : 'text-danger'}">${text}</span>`;
-                // Also alert for visibility if needed, or remove alert if page message is enough
-                // alert(text); 
             }
 
             // --- Variations (Attributes) ---
@@ -935,12 +943,12 @@
                     tag.style.backgroundColor = "#eee";
                     tag.style.borderRadius = "4px";
                     tag.innerHTML = `${size} <span class="remove-size" style="cursor:pointer;margin-left:5px;color:red;">&times;</span>`;
-                    
+
                     tag.querySelector(".remove-size").addEventListener("click", () => {
                         selectedSizes = selectedSizes.filter(s => s !== size);
                         renderSizes();
                     });
-                    
+
                     selectedSizesDiv.appendChild(tag);
                 });
                 sizesHidden.value = JSON.stringify(selectedSizes);
@@ -1006,12 +1014,12 @@
                     try {
                         attributeValues = JSON.parse(attrObj.attribute_values); // ✅ Stored as JSON in DB
                     } catch (e) {
-                         // Fallback: If not JSON, assume comma-separated string
-                         if (typeof attrObj.attribute_values === 'string') {
-                             attributeValues = attrObj.attribute_values.split(',').map(s => s.trim());
-                         } else {
-                             console.error("Invalid JSON for", attributeName, e);
-                         }
+                        // Fallback: If not JSON, assume comma-separated string
+                        if (typeof attrObj.attribute_values === 'string') {
+                            attributeValues = attrObj.attribute_values.split(',').map(s => s.trim());
+                        } else {
+                            console.error("Invalid JSON for", attributeName, e);
+                        }
                     }
                 }
 
@@ -1313,31 +1321,32 @@
                 console.log('Final Payload to send:', payload);
 
                 try {
-                    const res = await fetch("/api/admin/products", {
-                        method: "POST",
+                    const url = editProductId ? `/api/admin/products/${editProductId}` : "/api/admin/products";
+                    const method = editProductId ? "PUT" : "POST";
+
+                    const res = await fetch(url, {
+                        method: method,
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify(payload)
                     });
                     const data = await res.json();
                     if (res.ok) {
-                        showMessage(`✅ Product added successfully! ID: ${data.productId || 'N/A'}`, 'success');
-                        alert(`✅ Product added successfully! ID: ${data.productId || 'N/A'}`); // Keep alert for immediate feedback too
-                        form.reset(); // Clears text inputs
+                        const actionText = editProductId ? 'updated' : 'added';
+                        showMessage(`✅ Product ${actionText} successfully! ID: ${data.productId || 'N/A'}`, 'success');
+                        alert(`✅ Product ${actionText} successfully! ID: ${data.productId || 'N/A'}`);
 
-                        // Manually clear JS state and previews
-                        selectedSizes = [];
-                        selectedAttributeVariants = {};
-                        uploadedMainImage = "";
-                        uploadedGallery = [];
-
-                        renderSizes(); // Re-render sizes (will be empty)
-                        variantsContainer.innerHTML = ''; // Clear attribute variants display
-                        updateVariationsHidden(); // Clear hidden variations input
-
-                        // Clear image previews
-                        mainImagePreviewContainer.querySelectorAll('.uploaded-img-preview').forEach(img => img.remove());
-                        galleryPreviewContainer.innerHTML = ''; // Clear gallery container
-
+                        if (!editProductId) {
+                            form.reset(); // Only reset if adding new 
+                            selectedSizes = [];
+                            selectedAttributeVariants = {};
+                            uploadedMainImage = "";
+                            uploadedGallery = [];
+                            renderSizes();
+                            variantsContainer.innerHTML = '';
+                            updateVariationsHidden();
+                            mainImagePreviewContainer.querySelectorAll('.uploaded-img-preview').forEach(img => img.remove());
+                            galleryPreviewContainer.innerHTML = '';
+                        }
                     } else {
                         const errMsg = "❌ Error: " + (data.message || data.error || "Unknown error");
                         showMessage(errMsg, 'error');
@@ -1353,11 +1362,125 @@
             });
 
             // --- Initialize ---
-            loadCategories();
-            loadAttributes();
+
+            // Promise.all to ensure categories/attributes loaded before filling data
+            Promise.all([loadCategories(), loadAttributes()]).then(() => {
+                if (editProductId) {
+                    loadProductData(editProductId);
+                }
+            });
+
             renderSizes(); // Initialize sizes display
-            // renderVariations(); // Not needed as variants are rendered on attributeSelect change
             updateVariationsHidden(); // Ensure variationsHidden starts with an empty JSON object
+
+            // --- Load Product Data for Edit ---
+            async function loadProductData(id) {
+                try {
+                    const res = await fetch(`/api/admin/products/${id}`);
+                    if (!res.ok) throw new Error("Product not found");
+                    const product = await res.json();
+
+                    // Fill basic fields
+                    form.elements.name.value = product.name || '';
+                    form.elements.category.value = product.category || ''; // Ensure option exists
+                    form.elements.type.value = product.type || '';
+                    form.elements.brand.value = product.brand || '';
+                    form.elements.price.value = product.price || '';
+                    form.elements.origin_price.value = product.origin_price || '';
+                    form.elements.quantity.value = product.quantity || '';
+                    form.elements.sold.value = product.sold || '';
+                    form.elements.rate.value = product.rate || '';
+                    form.elements.slug.value = product.slug || '';
+                    form.elements.action.value = product.action || 'add to cart';
+                    form.elements.description.value = product.description || '';
+
+                    // Checkboxes
+                    if (form.elements.is_new) form.elements.is_new.checked = !!product.is_new;
+                    if (form.elements.on_sale) form.elements.on_sale.checked = !!product.on_sale;
+
+                    // Sizes
+                    try {
+                        const s = typeof product.sizes === 'string' ? JSON.parse(product.sizes) : product.sizes;
+                        if (Array.isArray(s)) selectedSizes = s;
+                    } catch (e) { console.error("Error parsing sizes", e); }
+                    renderSizes();
+
+                    // Attributes/Variations
+                    try {
+                        const v = typeof product.variations === 'string' ? JSON.parse(product.variations) : product.variations;
+                        if (v && typeof v === 'object') selectedAttributeVariants = v;
+                    } catch (e) { console.error("Error parsing variations", e); }
+                    updateVariationsHidden();
+                    // Note: We don't auto-open attribute select, but data is ready.
+
+                    // Main Image
+                    if (product.main_image) {
+                        uploadedMainImage = product.main_image;
+                        const mainPreview = mainImagePreviewContainer;
+                        // Clear existing
+                        mainPreview.querySelectorAll('.uploaded-img-preview').forEach(img => img.remove());
+
+                        const img = document.createElement('img');
+                        img.src = uploadedMainImage;
+                        img.style.maxWidth = '100px';
+                        img.style.maxHeight = '100px';
+                        img.style.marginTop = '10px';
+                        img.className = 'uploaded-img-preview';
+                        mainPreview.appendChild(img);
+                    }
+
+                    // Gallery
+                    try {
+                        const g = typeof product.gallery === 'string' ? JSON.parse(product.gallery) : product.gallery;
+                        if (Array.isArray(g)) {
+                            uploadedGallery = g;
+                            uploadedGallery.forEach(url => {
+                                // Create preview (copying logic from change handler - refactor would be better but keeping inline)
+                                const wrapper = document.createElement('div');
+                                wrapper.className = 'relative inline-block';
+                                wrapper.style.marginRight = '10px';
+                                wrapper.style.marginTop = '10px';
+                                wrapper.style.position = 'relative';
+
+                                const img = document.createElement('img');
+                                img.src = url;
+                                img.style.maxWidth = '80px';
+                                img.style.maxHeight = '80px';
+                                img.className = 'uploaded-img-preview';
+                                img.style.display = 'block';
+
+                                const removeBtn = document.createElement('button');
+                                removeBtn.innerHTML = '&times;';
+                                removeBtn.className = 'btn-remove-image';
+                                removeBtn.style.position = 'absolute';
+                                removeBtn.style.top = '-5px';
+                                removeBtn.style.right = '-5px';
+                                removeBtn.style.background = 'red';
+                                removeBtn.style.color = 'white';
+                                removeBtn.style.border = 'none';
+                                removeBtn.style.borderRadius = '50%';
+                                removeBtn.style.width = '20px';
+                                removeBtn.style.height = '20px';
+                                removeBtn.style.cursor = 'pointer';
+                                removeBtn.type = 'button';
+
+                                removeBtn.onclick = () => {
+                                    uploadedGallery = uploadedGallery.filter(u => u !== url);
+                                    wrapper.remove();
+                                };
+
+                                wrapper.appendChild(img);
+                                wrapper.appendChild(removeBtn);
+                                galleryPreviewContainer.appendChild(wrapper);
+                            });
+                        }
+                    } catch (e) { console.error("Error parsing gallery", e); }
+
+                } catch (err) {
+                    console.error(err);
+                    showMessage("Failed to load product data", "error");
+                }
+            }
         });
     </script>
 

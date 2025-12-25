@@ -185,7 +185,7 @@
                                                     <div class="text">Order detail</div>
                                                 </a>
                                             </li>-->
-                                            
+
                                         </ul>
                                     </li>
                                     <li class="menu-item has-children">
@@ -242,14 +242,14 @@
                             <div class="center-item">
                                 <div class="center-heading">Setting</div>
                                 <ul class="menu-list">
-                                    
+
                                     <li class="menu-item">
                                         <a href="/admin/setting.html" class="">
                                             <div class="icon"><i class="icon-settings"></i></div>
                                             <div class="text">Setting</div>
                                         </a>
                                     </li>
-                                    
+
                                 </ul>
                             </div>
 
@@ -590,7 +590,7 @@
                                         <i class="icon-maximize"></i>
                                     </div>
                                 </div>
-                                
+
                                 <div class="popup-wrap user type-header">
                                     <div class="dropdown">
                                         <button class="btn btn-secondary dropdown-toggle" type="button"
@@ -796,16 +796,16 @@
             const pagination = document.getElementById("pagination");
             const pageSizeSelect = document.querySelector(".wg-filter select");
             const searchInput = document.querySelector(".form-search input");
-    
+
             let allProducts = [];
             let filteredProducts = [];
             let currentPage = 1;
             let pageSize = parseInt(pageSizeSelect.value, 10);
-    
+
             function renderMessage(msg) {
                 productList.innerHTML = `<li class="product-item gap14"><div class="body-text">${msg}</div></li>`;
             }
-    
+
             async function fetchProducts() {
                 try {
                     renderMessage("Loading products...");
@@ -820,31 +820,31 @@
                     renderMessage("Error loading products");
                 }
             }
-    
+
             function renderPage() {
                 productList.innerHTML = "";
-    
+
                 if (!filteredProducts.length) {
                     renderMessage("No products found");
                     entriesInfo.textContent = "Showing 0 entries";
                     pagination.innerHTML = "";
                     return;
                 }
-    
+
                 const totalEntries = filteredProducts.length;
                 const totalPages = Math.ceil(totalEntries / pageSize);
                 if (currentPage > totalPages) currentPage = totalPages;
-    
+
                 const start = (currentPage - 1) * pageSize;
                 const end = Math.min(currentPage * pageSize, totalEntries);
                 const pageItems = filteredProducts.slice(start, end);
-    
+
                 // Render products
                 pageItems.forEach(p => {
                     const li = document.createElement("li");
                     li.className = "product-item gap14";
                     li.dataset.id = p.id;
-    
+
                     let sizes = "-";
                     if (p.sizes) {
                         try {
@@ -852,7 +852,7 @@
                             if (Array.isArray(parsedSizes) && parsedSizes.length) sizes = parsedSizes.join(", ");
                         } catch (e) { console.warn("Failed to parse sizes:", e); }
                     }
-    
+
                     li.innerHTML = `
                         <div class="image no-bg">
                             <img src="${p.main_image || '/images/products/default.png'}" alt="${p.name}">
@@ -869,23 +869,23 @@
                             <div class="body-text">${new Date(p.created_at).toLocaleDateString()}</div>
                             <div class="list-icon-function">
                                 <a href="product-detail.html?id=${p.id}" class="item eye"><i class="icon-eye"></i></a>
-                                <a href="edit-product.html?id=${p.id}" class="item edit"><i class="icon-edit-3"></i></a>
+                                <a href="add-product.html?id=${p.id}" class="item edit"><i class="icon-edit-3"></i></a>
                                 <div class="item trash" data-id="${p.id}"><i class="icon-trash-2"></i></div>
                             </div>
                         </div>
                     `;
-    
+
                     // Delete handler
                     li.querySelector(".item.trash").addEventListener("click", () => deleteProduct(p.id));
                     productList.appendChild(li);
                 });
-    
+
                 // Info
                 entriesInfo.textContent = `Showing ${start + 1}–${end} of ${totalEntries} entries`;
-    
+
                 // Pagination
                 pagination.innerHTML = "";
-    
+
                 const prevLi = document.createElement("li");
                 prevLi.innerHTML = `<a href="#"><i class="icon-chevron-left"></i></a>`;
                 if (currentPage === 1) prevLi.classList.add("disabled");
@@ -897,7 +897,7 @@
                     }
                 });
                 pagination.appendChild(prevLi);
-    
+
                 for (let i = 1; i <= totalPages; i++) {
                     const li = document.createElement("li");
                     li.innerHTML = `<a href="#">${i}</a>`;
@@ -909,7 +909,7 @@
                     });
                     pagination.appendChild(li);
                 }
-    
+
                 const nextLi = document.createElement("li");
                 nextLi.innerHTML = `<a href="#"><i class="icon-chevron-right"></i></a>`;
                 if (currentPage === totalPages) nextLi.classList.add("disabled");
@@ -922,7 +922,7 @@
                 });
                 pagination.appendChild(nextLi);
             }
-    
+
             async function deleteProduct(id) {
                 if (!confirm("Are you sure you want to delete this product?")) return;
                 try {
@@ -941,7 +941,7 @@
                     alert("⚠️ Failed to delete product");
                 }
             }
-    
+
             // Search filter
             searchInput.addEventListener("input", () => {
                 const q = searchInput.value.toLowerCase();
@@ -951,18 +951,18 @@
                 currentPage = 1;
                 renderPage();
             });
-    
+
             // Page size change
             pageSizeSelect.addEventListener("change", () => {
                 pageSize = parseInt(pageSizeSelect.value, 10);
                 currentPage = 1;
                 renderPage();
             });
-    
+
             fetchProducts();
         });
     </script>
-    
+
 
     <script>
         async function loadAdminData() {
