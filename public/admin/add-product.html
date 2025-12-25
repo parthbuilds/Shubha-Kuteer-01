@@ -915,6 +915,48 @@
             let attributes = []; // Raw attributes from backend
             let selectedAttributeVariants = {}; // { attributeName: [{value: "Red", code: "#FF0000"}] }
 
+            // --- Sizes Logic ---
+            const sizesSelect = document.getElementById("sizesSelect");
+            const sizesHidden = document.getElementById("sizesHidden");
+            const selectedSizesDiv = document.getElementById("selectedSizes");
+            let selectedSizes = [];
+
+            function renderSizes() {
+                selectedSizesDiv.innerHTML = "";
+                selectedSizes.forEach(size => {
+                    const tag = document.createElement("div");
+                    tag.classList.add("item"); // You might need to check css for proper class, usually something like tag-input
+                    // Inspecting style.css or guessing from classes. 
+                    // Based on "list-box-value", maybe just spans or divs.
+                    // Let's use a simple styled span/div.
+                    tag.style.display = "inline-block";
+                    tag.style.padding = "5px 10px";
+                    tag.style.margin = "5px";
+                    tag.style.backgroundColor = "#eee";
+                    tag.style.borderRadius = "4px";
+                    tag.innerHTML = `${size} <span class="remove-size" style="cursor:pointer;margin-left:5px;color:red;">&times;</span>`;
+                    
+                    tag.querySelector(".remove-size").addEventListener("click", () => {
+                        selectedSizes = selectedSizes.filter(s => s !== size);
+                        renderSizes();
+                    });
+                    
+                    selectedSizesDiv.appendChild(tag);
+                });
+                sizesHidden.value = JSON.stringify(selectedSizes);
+            }
+
+            if (sizesSelect) {
+                sizesSelect.addEventListener("change", (e) => {
+                    const val = e.target.value;
+                    if (val && !selectedSizes.includes(val)) {
+                        selectedSizes.push(val);
+                        renderSizes();
+                    }
+                    e.target.value = ""; // Reset select
+                });
+            }
+
             // --- Load Attributes from Database ---
             const attributeSelect = document.getElementById("attributeSelect");
             async function loadAttributes() {
@@ -964,7 +1006,12 @@
                     try {
                         attributeValues = JSON.parse(attrObj.attribute_values); // ✅ Stored as JSON in DB
                     } catch (e) {
-                        console.error("Invalid JSON for", attributeName, e);
+                         // Fallback: If not JSON, assume comma-separated string
+                         if (typeof attrObj.attribute_values === 'string') {
+                             attributeValues = attrObj.attribute_values.split(',').map(s => s.trim());
+                         } else {
+                             console.error("Invalid JSON for", attributeName, e);
+                         }
                     }
                 }
 
