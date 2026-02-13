@@ -3,7 +3,11 @@ import pool from "../utils/db.js";
 import jwt from "jsonwebtoken";
 
 const BCRYPT_SALT_ROUNDS = 10;
-const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
+
+if (!process.env.JWT_SECRET) {
+    throw new Error("JWT_SECRET environment variable is required");
+}
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export const registerUser = async (req, res) => {
     const { name, email, password } = req.body;
@@ -23,7 +27,7 @@ export const registerUser = async (req, res) => {
             "INSERT INTO users (name, email, password_hash) VALUES (?, ?, ?)",
             [name, email, password_hash]
         );
-        res.status(201).json({ message: "Registration successful! 🎉" });
+        res.status(201).json({ message: "Registration successful! " });
     } catch (error) {
         console.error("Error during registration:", error);
         res.status(500).json({ message: "An error occurred during registration." });

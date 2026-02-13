@@ -713,18 +713,29 @@
                                                 <option value="">Loading categories...</option>
                                             </select>
                                         </fieldset>
-                                
+
+                                        <fieldset class="name">
+                                            <div class="body-title">Attribute Type <span class="tf-color-1">*</span></div>
+                                            <select name="attribute_type" id="attributeType" required onchange="handleAttributeTypeChange()">
+                                                <option value="text">Text</option>
+                                                <option value="color">Color</option>
+                                                <option value="size">Size</option>
+                                                <option value="material">Material</option>
+                                            </select>
+                                        </fieldset>
+
                                         <fieldset class="name">
                                             <div class="body-title">Attribute name <span class="tf-color-1">*</span></div>
-                                            <input type="text" name="attribute_name" id="attributeName" placeholder="Attribute name" required>
+                                            <input type="text" name="attribute_name" id="attributeName" placeholder="Attribute name (e.g., Color, Size)" required>
+                                            <small class="text-tiny">This will be auto-filled based on type if left blank</small>
                                         </fieldset>
-                                
+
                                         <fieldset>
                                             <div class="body-title">Attribute values <span class="tf-color-1">*</span></div>
-                                            <div id="attributeValuesContainer">
-                                                </div>
+                                            <div id="attributeValuesContainer"></div>
                                             <button type="button" class="tf-button w-full mt-15" onclick="addAttributeValue()">+ Add Value</button>
                                         </fieldset>
+
                                         <div class="bot">
                                             <div></div>
                                             <button class="tf-button w208" type="submit">Save</button>
@@ -761,44 +772,125 @@
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const categorySelect = document.getElementById("attribute-category");
+            const attributeTypeSelect = document.getElementById("attributeType");
+            const attributeNameInput = document.getElementById("attributeName");
             const attributeForm = document.getElementById("new-attribute-form");
             const attributeValuesContainer = document.getElementById("attributeValuesContainer");
-    
-            // Function to create and add a new pair of input fields
+
+            let currentAttributeType = 'text';
+
+            // Handle attribute type change
+            window.handleAttributeTypeChange = function() {
+                currentAttributeType = attributeTypeSelect.value;
+
+                // Auto-fill attribute name based on type
+                const typeNames = {
+                    'color': 'Color',
+                    'size': 'Size',
+                    'material': 'Material',
+                    'text': ''
+                };
+                if (!attributeNameInput.value && typeNames[currentAttributeType]) {
+                    attributeNameInput.value = typeNames[currentAttributeType];
+                }
+
+                // Clear existing values and add new ones based on type
+                attributeValuesContainer.innerHTML = '';
+
+                // Add first value based on type
+                addAttributeValue();
+            };
+
+            // Function to create and add a new value input field
             window.addAttributeValue = function () {
                 const valueGroup = document.createElement('div');
-                valueGroup.className = 'd-flex align-items-center mb-2';
-    
+                valueGroup.className = 'd-flex align-items-center gap-2 mb-3 p-3 border rounded bg-light';
+
                 const valueInput = document.createElement('input');
                 valueInput.type = 'text';
-                valueInput.className = 'form-control mr-2';
-                valueInput.placeholder = 'Value (e.g., green)';
-    
-                const codeInput = document.createElement('input');
-                codeInput.type = 'text';
-                codeInput.className = 'form-control';
-                codeInput.placeholder = 'Code (e.g., #008000)';
-    
+                valueInput.className = 'form-control';
+                valueInput.placeholder = currentAttributeType === 'color' ? 'Color name (e.g., Red)' : 'Value';
+
+                let additionalInput = null;
+
+                if (currentAttributeType === 'color') {
+                    // For color type, add both hex input and color picker
+                    additionalInput = document.createElement('input');
+                    additionalInput.type = 'color';
+                    additionalInput.className = 'form-control form-control-color';
+                    additionalInput.style.width = '50px';
+                    additionalInput.style.height = '38px';
+                    additionalInput.title = 'Choose color';
+
+                    // Add hex code input
+                    const hexInput = document.createElement('input');
+                    hexInput.type = 'text';
+                    hexInput.className = 'form-control hex-input';
+                    hexInput.placeholder = 'Hex (e.g., #FF0000)';
+                    hexInput.style.width = '120px';
+                    hexInput.maxLength = 7;
+
+                    // Sync color picker and hex input
+                    additionalInput.addEventListener('input', (e) => {
+                        hexInput.value = e.target.value.toUpperCase();
+                    });
+                    hexInput.addEventListener('input', (e) => {
+                        if (/^#[0-9A-F]{6}$/i.test(e.target.value)) {
+                            additionalInput.value = e.target.value;
+                        }
+                    });
+
+                    // Store both value and hex code
+                    valueGroup.dataset.valueType = 'color';
+                    valueGroup.appendChild(valueInput);
+                    valueGroup.appendChild(hexInput);
+                    valueGroup.appendChild(additionalInput);
+
+                } else if (currentAttributeType === 'size') {
+                    // For size type, add size code input
+                    additionalInput = document.createElement('input');
+                    additionalInput.type = 'text';
+                    additionalInput.className = 'form-control';
+                    additionalInput.placeholder = 'Size code (e.g., S, M, L)';
+                    additionalInput.style.width = '100px';
+
+                    valueGroup.dataset.valueType = 'size';
+                    valueGroup.appendChild(valueInput);
+                    valueGroup.appendChild(additionalInput);
+
+                } else {
+                    // For text type, just add description input
+                    additionalInput = document.createElement('input');
+                    additionalInput.type = 'text';
+                    additionalInput.className = 'form-control';
+                    additionalInput.placeholder = 'Code/Description (optional)';
+                    additionalInput.style.width = '150px';
+
+                    valueGroup.dataset.valueType = 'text';
+                    valueGroup.appendChild(valueInput);
+                    valueGroup.appendChild(additionalInput);
+                }
+
+                // Remove button
                 const removeBtn = document.createElement('button');
                 removeBtn.type = 'button';
-                removeBtn.className = 'btn btn-danger btn-sm rounded-full';
-                removeBtn.textContent = 'x';
+                removeBtn.className = 'btn btn-danger btn-sm';
+                removeBtn.innerHTML = '<i class="icon-close"></i>';
+                removeBtn.style.width = '38px';
                 removeBtn.onclick = () => valueGroup.remove();
-    
-                valueGroup.appendChild(valueInput);
-                valueGroup.appendChild(codeInput);
+
                 valueGroup.appendChild(removeBtn);
                 attributeValuesContainer.appendChild(valueGroup);
             };
-    
+
             async function loadCategories() {
                 try {
                     const res = await fetch("/api/admin/categories/public");
                     if (!res.ok) throw new Error("Failed to load categories");
-    
+
                     const categories = await res.json();
                     categorySelect.innerHTML = '<option value="">Select Category</option>';
-    
+
                     categories.forEach(cat => {
                         const option = document.createElement("option");
                         option.value = cat.id;
@@ -810,46 +902,74 @@
                     categorySelect.innerHTML = '<option value="">Failed to load categories</option>';
                 }
             }
-    
+
             if (attributeForm) {
                 attributeForm.addEventListener("submit", async (e) => {
                     e.preventDefault();
-    
+
                     // Collect data from the dynamically added fields
-                    const valueInputs = attributeValuesContainer.querySelectorAll('input');
+                    const valueGroups = attributeValuesContainer.querySelectorAll('[data-value-type]');
                     const attributeValues = [];
-                    for (let i = 0; i < valueInputs.length; i += 2) {
-                        if (valueInputs[i].value && valueInputs[i + 1].value) {
-                            attributeValues.push({
-                                value: valueInputs[i].value.trim(),
-                                code: valueInputs[i + 1].value.trim()
-                            });
+
+                    valueGroups.forEach(group => {
+                        const inputs = group.querySelectorAll('input:not([type="button"])');
+                        const valueType = group.dataset.valueType;
+
+                        if (valueType === 'color') {
+                            const [nameInput, hexInput, colorPicker] = inputs;
+                            if (nameInput.value) {
+                                attributeValues.push({
+                                    value: nameInput.value.trim(),
+                                    hex: hexInput.value || colorPicker.value,
+                                    type: 'color'
+                                });
+                            }
+                        } else if (valueType === 'size') {
+                            const [nameInput, codeInput] = inputs;
+                            if (nameInput.value) {
+                                attributeValues.push({
+                                    value: nameInput.value.trim(),
+                                    code: codeInput.value.trim(),
+                                    type: 'size'
+                                });
+                            }
+                        } else {
+                            const [nameInput, codeInput] = inputs;
+                            if (nameInput.value) {
+                                attributeValues.push({
+                                    value: nameInput.value.trim(),
+                                    code: codeInput.value.trim() || null,
+                                    type: 'text'
+                                });
+                            }
                         }
-                    }
-    
+                    });
+
                     if (attributeValues.length === 0) {
                         return alert("Please add at least one attribute value.");
                     }
-    
+
                     const data = {
                         category_id: attributeForm.category_id.value,
                         attribute_name: attributeForm.attribute_name.value.trim().toLowerCase(),
-                        attribute_values: attributeValues // Now sends a JSON array
+                        attribute_type: currentAttributeType,
+                        attribute_values: attributeValues
                     };
-    
+
                     try {
                         const res = await fetch("/api/admin/attributes", {
                             method: "POST",
                             headers: { "Content-Type": "application/json" },
                             body: JSON.stringify(data)
                         });
-    
+
                         const result = await res.json();
-    
-                        if (res.ok && result.success) {
-                            alert(result.message || "Attribute added successfully");
+
+                        if (res.ok && (result.success || result.id)) {
+                            alert("Attribute added successfully");
                             attributeForm.reset();
-                            attributeValuesContainer.innerHTML = ''; // Clear dynamic fields
+                            attributeValuesContainer.innerHTML = '';
+                            currentAttributeType = 'text';
                         } else {
                             alert(result.message || result.error || "Failed to save attribute");
                         }
@@ -859,8 +979,10 @@
                     }
                 });
             }
-    
+
+            // Initialize
             loadCategories();
+            handleAttributeTypeChange();
         });
     </script>
 
