@@ -908,8 +908,12 @@
             if (editProductId) {
                 document.querySelector('h3').textContent = 'Edit Product';
                 document.querySelector('.breadcrumbs .text-tiny:last-child').textContent = 'Edit product';
-                // Wait for categories to load before fully populating? Or just run in parallel.
-                // We'll call loadProductData after initial setup.
+                // Remove required from file input — file inputs can't be pre-filled, so it blocks form submit on edit
+                const mainImgInput = document.getElementById('mainImageInput');
+                if (mainImgInput) mainImgInput.removeAttribute('required');
+                // Update submit button text
+                const submitBtn = form.querySelector('button[type="submit"]');
+                if (submitBtn) submitBtn.textContent = 'Update Product';
             }
 
             // Helper to show message
@@ -1228,19 +1232,7 @@
                             const removeBtn = document.createElement('button');
                             removeBtn.innerHTML = '&times;';
                             removeBtn.className = 'btn-remove-image';
-                            removeBtn.style.position = 'absolute';
-                            removeBtn.style.top = '-5px';
-                            removeBtn.style.right = '-5px';
-                            removeBtn.style.background = 'red';
-                            removeBtn.style.color = 'white';
-                            removeBtn.style.border = 'none';
-                            removeBtn.style.borderRadius = '50%';
-                            removeBtn.style.width = '20px';
-                            removeBtn.style.height = '20px';
-                            removeBtn.style.cursor = 'pointer';
-                            removeBtn.style.lineHeight = '18px';
-                            removeBtn.style.fontSize = '14px';
-                            removeBtn.style.padding = '0';
+                            removeBtn.style.cssText = 'position:absolute;top:-5px;right:-5px;background:red;color:white;border:none;border-radius:50%;width:20px;height:20px;min-width:20px;min-height:20px;max-width:20px;max-height:20px;cursor:pointer;font-size:14px;padding:0;display:flex;align-items:center;justify-content:center;box-sizing:border-box;line-height:1;';
                             removeBtn.type = 'button'; // Prevent form submit
 
                             removeBtn.onclick = () => {
@@ -1452,16 +1444,7 @@
                                 const removeBtn = document.createElement('button');
                                 removeBtn.innerHTML = '&times;';
                                 removeBtn.className = 'btn-remove-image';
-                                removeBtn.style.position = 'absolute';
-                                removeBtn.style.top = '-5px';
-                                removeBtn.style.right = '-5px';
-                                removeBtn.style.background = 'red';
-                                removeBtn.style.color = 'white';
-                                removeBtn.style.border = 'none';
-                                removeBtn.style.borderRadius = '50%';
-                                removeBtn.style.width = '20px';
-                                removeBtn.style.height = '20px';
-                                removeBtn.style.cursor = 'pointer';
+                                removeBtn.style.cssText = 'position:absolute;top:-5px;right:-5px;background:red;color:white;border:none;border-radius:50%;width:20px;height:20px;min-width:20px;min-height:20px;max-width:20px;max-height:20px;cursor:pointer;font-size:14px;padding:0;display:flex;align-items:center;justify-content:center;box-sizing:border-box;line-height:1;';
                                 removeBtn.type = 'button';
 
                                 removeBtn.onclick = () => {
