@@ -124,7 +124,7 @@ export default async function handler(req, res) {
         if (pathname === '/api/admin/auth/login' && req.method === 'POST') {
             try {
                 const { email, password } = req.body;
-                const bcrypt = await import("bcrypt");
+                const bcrypt = await import("bcryptjs");
                 const jwt = await import("jsonwebtoken");
                 const pool = await import("../backend/utils/db.js");
 
@@ -634,7 +634,7 @@ export default async function handler(req, res) {
         if (pathname.startsWith('/api/admin/users')) {
             try {
                 const pool = await import("../backend/utils/db.js");
-                const bcrypt = await import("bcrypt");
+                const bcrypt = await import("bcryptjs");
                 const jwt = await import("jsonwebtoken");
                 const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
 
@@ -1263,7 +1263,7 @@ export default async function handler(req, res) {
             const jwt = await import("jsonwebtoken");
             const JWT_SECRET = process.env.JWT_SECRET || "supersecretkey";
             const pool = await import("../backend/utils/db.js");
-            const bcrypt = await import("bcrypt");
+            const bcrypt = await import("bcryptjs");
 
             // Extract token from Authorization header (Bearer token)
             const authHeader = req.headers.authorization;
