@@ -1403,7 +1403,17 @@
                         if (v && typeof v === 'object') selectedAttributeVariants = v;
                     } catch (e) { console.error("Error parsing variations", e); }
                     updateVariationsHidden();
-                    // Note: We don't auto-open attribute select, but data is ready.
+                    
+                    // Auto-display saved attribute selections
+                    if (Object.keys(selectedAttributeVariants).length > 0) {
+                        Object.keys(selectedAttributeVariants).forEach(attrName => {
+                            const attrExists = attributes.some(a => a.attribute_name === attrName);
+                            if (attrExists) {
+                                displayAttributeSelection(attrName);
+                                attributeSelect.value = attrName;
+                            }
+                        });
+                    }
 
                     // Main Image
                     if (product.main_image) {

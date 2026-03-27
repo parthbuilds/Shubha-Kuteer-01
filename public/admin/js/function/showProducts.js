@@ -49,7 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                         <div class="body-text">${new Date(p.created_at).toLocaleDateString()}</div>
                         <div class="list-icon-function">
                             <a href="product-detail.html?id=${p.id}" class="item eye"><i class="icon-eye"></i></a>
-                            <a href="edit-product.html?id=${p.id}" class="item edit"><i class="icon-edit-3"></i></a>
+                            <a href="add-product.html?id=${p.id}" class="item edit"><i class="icon-edit-3"></i></a>
                             <div class="item trash" data-id="${p.id}"><i class="icon-trash-2"></i></div>
                         </div>
                     </div>
