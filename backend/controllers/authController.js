@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import pool from "../utils/db.js";
 import jwt from "jsonwebtoken";
 
+// Serverless-compatible auth controller using bcryptjs (not bcrypt)
 const BCRYPT_SALT_ROUNDS = 10;
 
 if (!process.env.JWT_SECRET) {
