@@ -400,3 +400,106 @@ input[type="file"] {
         border-radius: 8px;
     }
 }
+
+/* Checkout page layout fixes */
+.checkout-block {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkout-block .container {
+    flex: 1;
+}
+
+.checkout-block .content-main {
+    width: 100%;
+}
+
+/* Ensure footer stays at bottom */
+#footer {
+    position: relative;
+    z-index: 1;
+}
+
+/* Mobile responsive improvements for checkout */
+@media (max-width: 1023px) {
+    .checkout-block {
+        min-height: auto !important;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    
+    .checkout-block .content-main {
+        flex-direction: column-reverse;
+    }
+    
+    .checkout-block .left,
+    .checkout-block .right {
+        width: 100% !important;
+    }
+    
+    .checkout-block .right {
+        margin-bottom: 2rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .checkout-block {
+        padding-top: 1.5rem;
+        padding-bottom: 1.5rem;
+    }
+    
+    .checkout-block .form-checkout input,
+    .checkout-block .form-checkout textarea {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+    
+    #footer {
+        margin-top: 2rem;
+    }
+}
+
+/* Footer layout improvements */
+.footer {
+    width: 100%;
+}
+
+.footer-main {
+    width: 100%;
+}
+
+/* Form input improvements */
+.accent-primary {
+    accent-color: var(--primary);
+}
+
+.form-checkout input[type="radio"] {
+    cursor: pointer;
+}
+
+/* Order summary card improvements */
+.checkout-block .checkout-block {
+    height: fit-content;
+}
+
+/* List product checkout area */
+.list-product-checkout {
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+/* Custom scrollbar for product list */
+.list-product-checkout::-webkit-scrollbar {
+    width: 4px;
+}
+
+.list-product-checkout::-webkit-scrollbar-track {
+    background: var(--surface);
+    border-radius: 2px;
+}
+
+.list-product-checkout::-webkit-scrollbar-thumb {
+    background: var(--line);
+    border-radius: 2px;
+}

@@ -1801,7 +1801,135 @@
     <script src="./assets/js/phosphor-icons.js"></script>
     <script src="./assets/js/swiper-bundle.min.js"></script>
     <script src="./assets/js/main.js"></script>
-    <script src="./assets/js/search.js" ></script>
+    <script src="./assets/js/search.js"></script>
+    
+    <!-- Wishlist Page Script - Load wishlist from localStorage -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Find the main wishlist container
+            const wishlistContainer = document.querySelector('.list-product.hide-product-sold');
+            
+            if (!wishlistContainer) {
+                console.error('Wishlist container not found');
+                return;
+            }
+            
+            // Clear any hardcoded content
+            wishlistContainer.innerHTML = '';
+            
+            // Load wishlist from localStorage
+            let wishlistStore = localStorage.getItem('wishlistStore');
+            wishlistStore = wishlistStore ? JSON.parse(wishlistStore) : [];
+            
+            // Update wishlist count in header
+            const wishlistCountEl = document.querySelector('.wishlist-quantity');
+            if (wishlistCountEl) {
+                wishlistCountEl.textContent = wishlistStore.length;
+            }
+            
+            // Render wishlist items
+            if (wishlistStore.length === 0) {
+                wishlistContainer.innerHTML = `
+                    <div class="col-span-full text-center py-16">
+                        <div class="heading5 mb-4">Your wishlist is empty</div>
+                        <p class="text-secondary mb-6">Add products to your wishlist to see them here</p>
+                        <a href="shop.html" class="button-main inline-block">Continue Shopping</a>
+                    </div>
+                `;
+            } else {
+                wishlistStore.forEach(item => {
+                    const productHTML = `
+                        <div class="product-item grid-type" data-item="${item.id}">
+                            <div class="product-main cursor-pointer block">
+                                <div class="product-thumb bg-white relative overflow-hidden rounded-2xl">
+                                    <div class="list-action-right absolute top-3 right-3 max-lg:hidden">
+                                        <div class="remove-wishlist-btn w-[32px] h-[32px] flex items-center justify-center rounded-full bg-white duration-300 relative cursor-pointer hover:bg-red hover:text-white">
+                                            <div class="tag-action bg-black text-white caption2 px-1.5 py-0.5 rounded-sm">Remove</div>
+                                            <i class="ph ph-x text-lg"></i>
+                                        </div>
+                                    </div>
+                                    <div class="product-img w-full h-full aspect-[3/4]">
+                                        <img class="w-full h-full object-cover duration-700" 
+                                            src="${item.thumbImage?.[0] || '/assets/images/product/productDefault.png'}" 
+                                            alt="${item.name || 'Product'}" />
+                                    </div>
+                                    <div class="list-action grid grid-cols-2 gap-3 px-5 absolute w-full bottom-5 max-lg:hidden">
+                                        <div class="quick-view-btn w-full text-button-uppercase py-2 text-center rounded-full duration-300 bg-white hover:bg-black hover:text-white text-secondary">
+                                            Quick View
+                                        </div>
+                                        <div class="add-cart-btn w-full text-button-uppercase py-2 text-center rounded-full duration-500 bg-white hover:bg-black hover:text-white text-secondary">
+                                            Add To Cart
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="product-infor mt-4 lg:mb-7">
+                                    <div class="product-name text-title duration-300">${item.name || 'Unknown Product'}</div>
+                                    <div class="product-price-block flex items-center gap-2 flex-wrap mt-1 duration-300 relative z-[1]">
+                                        <div class="product-price text-title">₹${item.price || 0}.00</div>
+                                        ${item.originPrice ? `
+                                        <div class="product-origin-price caption1 text-secondary2">
+                                            <del>₹${item.originPrice}.00</del>
+                                        </div>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    wishlistContainer.insertAdjacentHTML('beforeend', productHTML);
+                });
+                
+                // Add remove functionality to wishlist items
+                document.querySelectorAll('.remove-wishlist-btn').forEach(btn => {
+                    btn.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        const productItem = this.closest('.product-item');
+                        const productId = productItem.getAttribute('data-item');
+                        
+                        // Remove from wishlistStore
+                        wishlistStore = wishlistStore.filter(item => item.id !== productId);
+                        localStorage.setItem('wishlistStore', JSON.stringify(wishlistStore));
+                        
+                        // Remove from UI
+                        productItem.remove();
+                        
+                        // Update count
+                        if (wishlistCountEl) {
+                            wishlistCountEl.textContent = wishlistStore.length;
+                        }
+                        
+                        // Show empty message if no items left
+                        if (wishlistStore.length === 0) {
+                            wishlistContainer.innerHTML = `
+                                <div class="col-span-full text-center py-16">
+                                    <div class="heading5 mb-4">Your wishlist is empty</div>
+                                    <p class="text-secondary mb-6">Add products to your wishlist to see them here</p>
+                                    <a href="shop.html" class="button-main inline-block">Continue Shopping</a>
+                                </div>
+                            `;
+                        }
+                        
+                        // Update modal wishlist
+                        if (typeof handleItemModalWishlist === 'function') {
+                            handleItemModalWishlist();
+                        }
+                    });
+                });
+                
+                // Add click functionality to view product
+                document.querySelectorAll('.product-main').forEach(product => {
+                    product.addEventListener('click', function(e) {
+                        // Don't navigate if clicking action buttons
+                        if (e.target.closest('.remove-wishlist-btn') || e.target.closest('.add-cart-btn')) {
+                            return;
+                        }
+                        const productId = this.closest('.product-item').getAttribute('data-item');
+                        window.location.href = `product-default.html?id=${productId}`;
+                    });
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>
