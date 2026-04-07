@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import pool from "../utils/db.js";
 import jwt from "jsonwebtoken";
 
@@ -15,24 +15,33 @@ export const registerUser = async (req, res) => {
 
     // Validate all required fields, including phone
     if (!name || !email || !phone || !password) {
-        return res.status(400).json({ message: "Name, email, phone, and password are required " });
+        return res.status(400).json({ message: "Name, email, phone, and password are required" });
     }
+
+    // Type validation
+    if (typeof email !== 'string' || typeof password !== 'string') {
+        return res.status(400).json({ message: "Invalid data types" });
+    }
+
     try {
+        // Check database connection first
+        await pool.query('SELECT 1');
+
         // Check for existing user by email or phone
         const [existingUserByEmail] = await pool.query(
             "SELECT * FROM users WHERE email = ?",
-            [email]
+            [email.trim().toLowerCase()]
         );
         if (existingUserByEmail.length > 0) {
-            return res.status(409).json({ message: "Email already registered " });
+            return res.status(409).json({ message: "Email already registered" });
         }
 
         const [existingUserByPhone] = await pool.query(
             "SELECT * FROM users WHERE phone = ?",
-            [phone]
+            [phone.trim()]
         );
         if (existingUserByPhone.length > 0) {
-            return res.status(409).json({ message: "Phone number already registered " });
+            return res.status(409).json({ message: "Phone number already registered" });
         }
 
         const password_hash = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
@@ -40,53 +49,85 @@ export const registerUser = async (req, res) => {
         // Insert new user with phone number
         await pool.query(
             "INSERT INTO users (name, email, phone, password_hash) VALUES (?, ?, ?, ?)",
-            [name, email, phone, password_hash]
+            [name.trim(), email.trim().toLowerCase(), phone.trim(), password_hash]
         );
-        return res.status(201).json({ message: "Registration successful! " });
+        return res.status(201).json({ message: "Registration successful!" });
     } catch (error) {
         console.error("Registration error:", error);
-        return res.status(500).json({ message: "Registration failed ", error: error.message });
+        
+        // Provide more specific error messages
+        if (error.message.includes('Database connection not available')) {
+            return res.status(503).json({ message: "Service temporarily unavailable. Please try again later." });
+        }
+        if (error.code === 'ER_NO_SUCH_TABLE') {
+            return res.status(500).json({ message: "Database setup incomplete. Please contact support." });
+        }
+        if (error.code === 'ECONNREFUSED' || error.code === 'ETIMEDOUT') {
+            return res.status(503).json({ message: "Unable to connect to database. Please try again later." });
+        }
+        
+        return res.status(500).json({ message: "Registration failed", error: error.message });
     }
 };
 
 export const loginUser = async (req, res) => {
-    // You might want to allow login by email OR phone. For now, keeping it to email as per original.
-    // If you want to allow login by phone, you'd adjust the query.
     const { email, password } = req.body;
+    
     if (!email || !password) {
-        return res.status(400).json({ message: "Email and password are required " });
+        return res.status(400).json({ message: "Email and password are required" });
     }
+
+    // Type validation
+    if (typeof email !== 'string' || typeof password !== 'string') {
+        return res.status(400).json({ message: "Invalid data types" });
+    }
+
     try {
+        // Check database connection first
+        await pool.query('SELECT 1');
+
         const [rows] = await pool.query(
-            "SELECT id, name, email, phone, password_hash FROM users WHERE email = ?", // Select phone as well
-            [email]
+            "SELECT id, name, email, phone, password_hash FROM users WHERE email = ?",
+            [email.trim().toLowerCase()]
         );
         if (rows.length === 0) {
-            return res.status(401).json({ message: "Invalid credentials " });
+            return res.status(401).json({ message: "Invalid credentials" });
         }
         const user = rows[0];
         const isMatch = await bcrypt.compare(password, user.password_hash);
         if (!isMatch) {
-            return res.status(401).json({ message: "Invalid credentials " });
+            return res.status(401).json({ message: "Invalid credentials" });
         }
         const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: "1h" });
         const [firstName, lastName] = user.name ? user.name.split(' ') : ['', ''];
         return res.status(200).json({
-            message: "Login successful! Welcome back. ✅",
+            message: "Login successful! Welcome back.",
             token,
             user: {
                 id: user.id,
                 first_name: firstName,
                 last_name: lastName || '',
                 email: user.email,
-                phone_number: user.phone, // Include phone number here
+                phone_number: user.phone,
                 dob: '',
                 full_name: user.name
             }
         });
     } catch (error) {
         console.error("Login error:", error);
-        return res.status(500).json({ message: "Login failed ", error: error.message });
+        
+        // Provide more specific error messages
+        if (error.message.includes('Database connection not available')) {
+            return res.status(503).json({ message: "Service temporarily unavailable. Please try again later." });
+        }
+        if (error.code === 'ER_NO_SUCH_TABLE') {
+            return res.status(500).json({ message: "Database setup incomplete. Please contact support." });
+        }
+        if (error.code === 'ECONNREFUSED' || error.code === 'ETIMEDOUT') {
+            return res.status(503).json({ message: "Unable to connect to database. Please try again later." });
+        }
+        
+        return res.status(500).json({ message: "Login failed", error: error.message });
     }
 };
 

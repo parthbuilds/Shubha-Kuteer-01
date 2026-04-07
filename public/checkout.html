@@ -1916,6 +1916,102 @@
             </div>
             <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
             <script>
+                // Checkout Form Persistence with Type Safety
+                const CHECKOUT_FORM_KEY = 'checkoutFormData';
+
+                // Type-safe form field retrieval
+                const getFormField = (id, type = 'string') => {
+                    const element = document.getElementById(id);
+                    if (!element) return type === 'number' ? null : '';
+                    
+                    const value = element.value?.trim() || '';
+                    
+                    // Type validation
+                    switch(type) {
+                        case 'email':
+                            return value.match(/^[^\s@]+@[^\s@]+\.[^\s@]+$/) ? value : '';
+                        case 'number':
+                            const num = parseInt(value, 10);
+                            return !isNaN(num) && num > 0 ? num : null;
+                        case 'string':
+                        default:
+                            return value.replace(/[<>\"']/g, ''); // Sanitize HTML/special chars
+                    }
+                };
+
+                // Save form data to localStorage with debouncing
+                let saveTimeout;
+                const saveFormData = () => {
+                    clearTimeout(saveTimeout);
+                    saveTimeout = setTimeout(() => {
+                        const formData = {
+                            firstName: getFormField('firstName', 'string'),
+                            lastName: getFormField('lastName', 'string'),
+                            email: getFormField('email', 'email'),
+                            phoneNumber: getFormField('phoneNumber', 'string'),
+                            city: getFormField('city', 'string'),
+                            apartment: getFormField('apartment', 'string'),
+                            postal: getFormField('postal', 'string'),
+                            note: getFormField('note', 'string'),
+                            timestamp: Date.now()
+                        };
+                        
+                        try {
+                            localStorage.setItem(CHECKOUT_FORM_KEY, JSON.stringify(formData));
+                        } catch (e) {
+                            console.warn('Failed to save form data:', e);
+                        }
+                    }, 300); // 300ms debounce
+                };
+
+                // Load form data from localStorage
+                const loadFormData = () => {
+                    try {
+                        const saved = localStorage.getItem(CHECKOUT_FORM_KEY);
+                        if (!saved) return;
+                        
+                        const data = JSON.parse(saved);
+                        
+                        // Only load if data is less than 24 hours old
+                        if (data.timestamp && (Date.now() - data.timestamp) > 24 * 60 * 60 * 1000) {
+                            localStorage.removeItem(CHECKOUT_FORM_KEY);
+                            return;
+                        }
+                        
+                        // Safely populate fields
+                        const fields = ['firstName', 'lastName', 'email', 'phoneNumber', 'city', 'apartment', 'postal', 'note'];
+                        fields.forEach(field => {
+                            const element = document.getElementById(field);
+                            if (element && data[field]) {
+                                element.value = data[field];
+                            }
+                        });
+                    } catch (e) {
+                        console.warn('Failed to load form data:', e);
+                        localStorage.removeItem(CHECKOUT_FORM_KEY);
+                    }
+                };
+
+                // Clear saved form data
+                const clearSavedFormData = () => {
+                    localStorage.removeItem(CHECKOUT_FORM_KEY);
+                };
+
+                // Add listeners to all form fields for auto-save
+                document.addEventListener('DOMContentLoaded', () => {
+                    loadFormData();
+                    
+                    const fields = ['firstName', 'lastName', 'email', 'phoneNumber', 'city', 'apartment', 'postal', 'note'];
+                    fields.forEach(fieldId => {
+                        const element = document.getElementById(fieldId);
+                        if (element) {
+                            element.addEventListener('input', saveFormData);
+                            element.addEventListener('change', saveFormData);
+                            element.addEventListener('blur', saveFormData);
+                        }
+                    });
+                });
+
                 // Function to get cart total and products from main.js
                 function getCartData() {
                     // Get cart data from localStorage
@@ -1968,18 +2064,37 @@
                         return;
                     }
 
+                    // Type-safe form data collection with validation
                     const formData = {
-                        first_name: document.getElementById("firstName").value,
-                        last_name: document.getElementById("lastName").value,
-                        email: document.getElementById("email").value,
-                        phone_number: document.getElementById("phoneNumber").value,
-                        city: document.getElementById("city").value,
-                        apartment: document.getElementById("apartment").value,
-                        postal_code: document.getElementById("postal").value,
-                        note: document.getElementById("note").value,
+                        first_name: getFormField("firstName", "string"),
+                        last_name: getFormField("lastName", "string"),
+                        email: getFormField("email", "email") || document.getElementById("email")?.value?.trim() || "",
+                        phone_number: String(getFormField("phoneNumber", "string") || "").replace(/\D/g, "").slice(0, 15),
+                        city: getFormField("city", "string"),
+                        apartment: getFormField("apartment", "string"),
+                        postal_code: String(getFormField("postal", "string") || "").replace(/\D/g, "").slice(0, 10),
+                        note: getFormField("note", "string"),
                         amount: cartData.totalAmount,
-                        products: cartData.products // Add products array
+                        products: cartData.products
                     };
+
+                    // Validation
+                    if (!formData.first_name || !formData.last_name) {
+                        alert("Please enter your full name.");
+                        return;
+                    }
+                    if (!formData.email || !formData.email.includes('@')) {
+                        alert("Please enter a valid email address.");
+                        return;
+                    }
+                    if (!formData.phone_number || formData.phone_number.length < 10) {
+                        alert("Please enter a valid phone number (at least 10 digits).");
+                        return;
+                    }
+                    if (!formData.city || !formData.apartment || !formData.postal_code) {
+                        alert("Please complete your address information.");
+                        return;
+                    }
 
                     console.log('Processing payment for amount:', cartData.totalAmount, 'INR');
                     console.log('Products in order:', cartData.products);
@@ -1994,7 +2109,7 @@
                         const orderData = await res.json();
 
                         if (!orderData.success) {
-                            alert("❌ Failed to create order: " + orderData.error);
+                            alert("Failed to create order: " + (orderData.error || "Unknown error"));
                             return;
                         }
 
@@ -2018,10 +2133,11 @@
                                         order_id: orderData.order_id
                                     })
                                 });
-                                alert("✅ Payment Successful!");
+                                alert("Payment Successful!");
 
-                                // Clear cart after successful payment
+                                // Clear cart and saved form after successful payment
                                 localStorage.removeItem("cartStore");
+                                clearSavedFormData();
                                 window.location.href = "index.html";
                             },
                             prefill: {
@@ -2043,7 +2159,7 @@
                         rzp.open();
                     } catch (err) {
                         console.error("Payment error:", err);
-                        alert("❌ Payment initiation failed");
+                        alert("Payment initiation failed: " + (err.message || "Unknown error"));
                     }
                 });
             </script>

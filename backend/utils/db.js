@@ -1,7 +1,12 @@
 import mysql from "mysql2/promise";
-import "dotenv/config";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
+
+// Only import dotenv in development
+if (process.env.NODE_ENV !== 'production') {
+    const dotenv = await import('dotenv');
+    dotenv.config();
+}
 
 // Correctly resolve __dirname for ES Modules
 const __filename = fileURLToPath(import.meta.url);
@@ -12,53 +17,77 @@ const requiredEnvVars = ['DB_HOST', 'DB_USER', 'DB_PASS', 'DB_NAME', 'JWT_SECRET
 const missingEnvVars = requiredEnvVars.filter(varName => !process.env[varName]);
 
 if (missingEnvVars.length > 0) {
-    throw new Error(
+    console.error(
         `Missing required environment variables: ${missingEnvVars.join(', ')}\n` +
-        `Please set these variables in your .env file. See .env.example for reference.`
+        `Please set these variables in your .env file or Vercel dashboard.`
     );
 }
 
 // Create the connection pool with Hostinger-compatible SSL settings
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT || 3306,
-  ssl: {
-      // Hostinger requires this to be false
-      // In production, consider implementing proper SSL certificates
-      // For more information: https://nodejs.org/api/tls.html#tls_class_tls_sslmethod
-      rejectUnauthorized: false,
-  },
-  waitForConnections: true,
-  connectionLimit: 5, // Reduced for serverless
-  queueLimit: 0,
-  acquireTimeout: 60000,
-  timeout: 60000,
-  reconnect: true,
-});
+let pool;
 
-// Connection pool monitoring
-pool.on('connection', (connection) => {
-    console.log('New database connection established');
-});
+try {
+    pool = mysql.createPool({
+        host: process.env.DB_HOST,
+        user: process.env.DB_USER,
+        password: process.env.DB_PASS,
+        database: process.env.DB_NAME,
+        port: process.env.DB_PORT || 3306,
+        ssl: {
+            rejectUnauthorized: false,
+        },
+        waitForConnections: true,
+        connectionLimit: 2, // Reduced for serverless
+        queueLimit: 0,
+        acquireTimeout: 30000,
+        timeout: 30000,
+        idleTimeout: 30000, // Close idle connections after 30s
+        enableKeepAlive: true,
+        keepAliveInitialDelay: 10000,
+    });
 
-pool.on('acquire', (connection) => {
-    console.log('Connection %d acquired', connection.threadId);
-});
+    // Connection pool monitoring (only in development)
+    if (process.env.NODE_ENV !== 'production') {
+        pool.on('connection', (connection) => {
+            console.log('New database connection established');
+        });
 
-pool.on('release', (connection) => {
-    console.log('Connection %d released', connection.threadId);
-});
+        pool.on('acquire', (connection) => {
+            console.log('Connection %d acquired', connection.threadId);
+        });
 
-pool.on('enqueue', () => {
-    console.log('Waiting for available connection slot');
-});
+        pool.on('release', (connection) => {
+            console.log('Connection %d released', connection.threadId);
+        });
+
+        pool.on('enqueue', () => {
+            console.log('Waiting for available connection slot');
+        });
+    }
+
+    pool.on('error', (err) => {
+        console.error('Database pool error:', err);
+    });
+
+} catch (error) {
+    console.error('Failed to create database pool:', error);
+    // Create a mock pool that will throw descriptive errors
+    pool = {
+        query: async () => {
+            throw new Error('Database connection not available. Check environment variables.');
+        },
+        getConnection: async () => {
+            throw new Error('Database connection not available. Check environment variables.');
+        }
+    };
+}
 
 // Health check utility
 export const healthCheck = async () => {
     try {
+        if (!pool || !pool.query) {
+            return { status: 'unhealthy', database: 'disconnected', error: 'Pool not initialized' };
+        }
         const [rows] = await pool.query('SELECT 1 as test');
         return { status: 'healthy', database: 'connected', test: rows[0] };
     } catch (error) {

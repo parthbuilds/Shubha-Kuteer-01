@@ -354,24 +354,34 @@ modalWishlistMain?.addEventListener("click", (e) => {
 
 // Set wishlist length
 const handleItemModalWishlist = () => {
-  wishlistStore = localStorage.getItem("wishlistStore");
-
-  if (wishlistStore) {
-    wishlistIcon.querySelector("span").innerHTML =
-      JSON.parse(wishlistStore).length;
-  }
-
-  // Set wishlist item
+  // Guard: Only run on pages with wishlist modal
+  const wishlistIcon = document.querySelector(".wishlist-icon");
   const listItemWishlist = document.querySelector(
     ".modal-wishlist-block .list-product"
   );
+  
+  if (!wishlistIcon || !listItemWishlist) {
+    return; // Exit early if elements don't exist
+  }
 
+  wishlistStore = localStorage.getItem("wishlistStore");
+
+  if (wishlistStore) {
+    const wishlistSpan = wishlistIcon.querySelector("span");
+    if (wishlistSpan) {
+      wishlistSpan.innerHTML = JSON.parse(wishlistStore).length;
+    }
+  }
+
+  // Set wishlist item
   listItemWishlist.innerHTML = "";
 
-  if (JSON.parse(wishlistStore).length === 0) {
+  const store = wishlistStore ? JSON.parse(wishlistStore) : [];
+  
+  if (store.length === 0) {
     listItemWishlist.innerHTML = `<p class='mt-1'>No product in wishlist</p>`;
   } else {
-    JSON.parse(wishlistStore).forEach((item) => {
+    store.forEach((item) => {
       const prdItem = document.createElement("div");
       prdItem.setAttribute("data-item", item.id);
       prdItem.classList.add(
@@ -387,15 +397,15 @@ const handleItemModalWishlist = () => {
       prdItem.innerHTML = `
                 <div class="infor flex items-center gap-5 ">
                     <div class="bg-img">
-                        <img src=${item.thumbImage[0]} alt='product'
+                        <img src=${item.thumbImage?.[0] || '/assets/images/product/productDefault.png'} alt='product'
                             class='w-[100px] aspect-square flex-shrink-0 rounded-lg' />
                     </div>
                     <div class=''>
-                        <div class="name text-button">${item.name}</div>
+                        <div class="name text-button">${item.name || 'Unknown'}</div>
                         <div class="flex items-center gap-2 mt-2">
-                            <div class="product-price text-title">₹${item.price}.00</div>
+                            <div class="product-price text-title">₹${item.price || 0}.00</div>
                             <div class="product-origin-price text-title text-secondary2">
-                                <del>₹${item.originPrice}.00</del>
+                                <del>₹${item.originPrice || 0}.00</del>
                             </div>
                         </div>
                     </div>
@@ -413,18 +423,21 @@ const handleItemModalWishlist = () => {
   const prdItems = listItemWishlist.querySelectorAll(".item");
   prdItems.forEach((prd) => {
     const removeWishlistBtn = prd.querySelector(".remove-wishlist-btn");
-    removeWishlistBtn.addEventListener("click", () => {
-      const prdId = removeWishlistBtn
-        .closest(".item")
-        .getAttribute("data-item");
-      // JSON.parse(wishlistStore)
-      const newArray = JSON.parse(wishlistStore).filter(
-        (item) => item.id !== prdId
-      );
-      localStorage.setItem("wishlistStore", JSON.stringify(newArray));
-      handleItemModalWishlist();
-      updateWishlistIcons();
-    });
+    if (removeWishlistBtn) {
+      removeWishlistBtn.addEventListener("click", () => {
+        const prdId = removeWishlistBtn
+          .closest(".item")
+          ?.getAttribute("data-item");
+        if (!prdId || !wishlistStore) return;
+        
+        const newArray = JSON.parse(wishlistStore).filter(
+          (item) => item.id !== prdId
+        );
+        localStorage.setItem("wishlistStore", JSON.stringify(newArray));
+        handleItemModalWishlist();
+        updateWishlistIcons();
+      });
+    }
   });
 };
 
@@ -492,29 +505,48 @@ modalCartMain?.addEventListener("click", (e) => {
 
 // Set cart length
 const handleItemModalCart = () => {
-  cartStore = localStorage.getItem("cartStore");
-  cartStore = cartStore ? JSON.parse(cartStore) : [];
-
-  if (cartStore) {
-    cartIcon.querySelector("span").innerHTML = cartStore.length;
-  }
-
-  // Set cart item
+  // Guard: Only run on pages with cart modal
+  const cartIcon = document.querySelector(".cart-icon");
+  const modalCart = document.querySelector(".modal-cart-block");
   const listItemCart = document.querySelector(
     ".modal-cart-block .list-product"
   );
+  
+  if (!cartIcon || !modalCart || !listItemCart) {
+    return; // Exit early if elements don't exist
+  }
 
+  cartStore = localStorage.getItem("cartStore");
+  cartStore = cartStore ? JSON.parse(cartStore) : [];
+
+  // Update cart count
+  const cartSpan = cartIcon.querySelector("span");
+  if (cartSpan) {
+    cartSpan.innerHTML = cartStore.length;
+  }
+
+  // Set cart item
   listItemCart.innerHTML = "";
 
   if (cartStore.length === 0) {
     listItemCart.innerHTML = `<p class='mt-1'>No product in cart</p>`;
+    
+    // Reset totals when cart is empty
+    const morePriceEl = modalCart.querySelector(".more-price");
+    const progressLineEl = modalCart.querySelector(".tow-bar-block .progress-line");
+    const totalCartEl = modalCart.querySelector(".total-cart");
+    
+    if (morePriceEl) morePriceEl.innerHTML = 0;
+    if (progressLineEl) progressLineEl.style.width = "0";
+    if (totalCartEl) totalCartEl.innerHTML = "₹0.00";
   } else {
     // Initial money to freeship in cart
     let moneyForFreeship = 2000;
     let totalCart = 0;
 
     cartStore.forEach((item) => {
-      totalCart = Number(totalCart) + Number(item.price);
+      const quantity = item.quantityPurchase || 1;
+      totalCart = Number(totalCart) + (Number(item.price) * quantity);
 
       // Create prd
       const prdItem = document.createElement("div");
@@ -532,12 +564,12 @@ const handleItemModalCart = () => {
       prdItem.innerHTML = `
                 <div class="infor flex items-center gap-3 w-full">
                     <div class="bg-img w-[100px] aspect-square flex-shrink-0 rounded-lg overflow-hidden">
-                        <img src=${item.thumbImage[0]} alt='product'
+                        <img src=${item.thumbImage?.[0] || '/assets/images/product/productDefault.png'} alt='product'
                             class='w-full h-full' />
                     </div>
                     <div class='w-full'>
                         <div class="flex items-center justify-between w-full">
-                            <div class="name text-button">${item.name}</div>
+                            <div class="name text-button">${item.name || 'Unknown'}</div>
                             <div
                                 class="remove-cart-btn remove-btn caption1 font-semibold text-red underline cursor-pointer">
                                 Remove
@@ -545,9 +577,9 @@ const handleItemModalCart = () => {
                         </div>
                         <div class="flex items-center justify-between gap-2 mt-3 w-full">
                             <div class="flex items-center text-secondary2 capitalize">
-                                ${item.sizes[0]}/${item.variation[0].color}
+                                ${item.sizes?.[0] || 'N/A'}/${item.variation?.[0]?.color || 'N/A'}
                             </div>
-                            <div class="product-price text-title">₹${item.price}.00</div>
+                            <div class="product-price text-title">₹${item.price || 0}.00</div>
                         </div>
                     </div>
                 </div>
@@ -557,35 +589,43 @@ const handleItemModalCart = () => {
     });
 
     // Set money to freeship in cart
-    modalCart.querySelector(".more-price").innerHTML =
-      moneyForFreeship - totalCart;
-    modalCart.querySelector(".tow-bar-block .progress-line").style.width =
-      (totalCart / moneyForFreeship) * 100 + "%";
-    modalCart.querySelector(".total-cart").innerHTML = "₹" + totalCart + ".00";
+    const morePriceEl = modalCart.querySelector(".more-price");
+    const progressLineEl = modalCart.querySelector(".tow-bar-block .progress-line");
+    const totalCartEl = modalCart.querySelector(".total-cart");
+    
+    if (morePriceEl) morePriceEl.innerHTML = moneyForFreeship - totalCart;
+    if (progressLineEl) progressLineEl.style.width = (totalCart / moneyForFreeship) * 100 + "%";
+    if (totalCartEl) totalCartEl.innerHTML = "₹" + totalCart + ".00";
+    
     if (moneyForFreeship - totalCart <= 0) {
-      modalCart.querySelector(".more-price").innerHTML = 0;
-      modalCart.querySelector(".tow-bar-block .progress-line").style.width =
-        "100%";
+      if (morePriceEl) morePriceEl.innerHTML = 0;
+      if (progressLineEl) progressLineEl.style.width = "100%";
     }
   }
 
   const prdItems = listItemCart.querySelectorAll(".item");
   prdItems.forEach((prd) => {
     const removeCartBtn = prd.querySelector(".remove-cart-btn");
-    removeCartBtn.addEventListener("click", () => {
-      const prdId = removeCartBtn.closest(".item").getAttribute("data-item");
-      // cartStore
-      const newArray = cartStore.filter((item) => item.id !== prdId);
-      localStorage.setItem("cartStore", JSON.stringify(newArray));
-      handleItemModalCart();
+    if (removeCartBtn) {
+      removeCartBtn.addEventListener("click", () => {
+        const prdId = removeCartBtn.closest(".item")?.getAttribute("data-item");
+        if (!prdId) return;
+        
+        const newArray = cartStore.filter((item) => item.id !== prdId);
+        localStorage.setItem("cartStore", JSON.stringify(newArray));
+        handleItemModalCart();
 
-      if (cartStore.length === 0) {
-        modalCart.querySelector(".more-price").innerHTML = 0;
-        modalCart.querySelector(".tow-bar-block .progress-line").style.width =
-          "0";
-        modalCart.querySelector(".total-cart").innerHTML = "₹0.00";
-      }
-    });
+        if (cartStore.length === 0) {
+          const morePriceEl = modalCart.querySelector(".more-price");
+          const progressLineEl = modalCart.querySelector(".tow-bar-block .progress-line");
+          const totalCartEl = modalCart.querySelector(".total-cart");
+          
+          if (morePriceEl) morePriceEl.innerHTML = 0;
+          if (progressLineEl) progressLineEl.style.width = "0";
+          if (totalCartEl) totalCartEl.innerHTML = "₹0.00";
+        }
+      });
+    }
   });
 };
 
@@ -622,52 +662,58 @@ const countDownCart = setInterval(function () {
 }, 1000);
 
 // Open note, shipping, coupon popup
-const noteBtn = modalCart.querySelector(".note-btn");
-const shippingBtn = modalCart.querySelector(".shipping-btn");
-const couponBtn = modalCart.querySelector(".coupon-btn");
-const notePopup = modalCart.querySelector(".note-block");
-const shippingPopup = modalCart.querySelector(".shipping-block");
-const couponPopup = modalCart.querySelector(".coupon-block");
-
 if (modalCart) {
+  const noteBtn = modalCart.querySelector(".note-btn");
+  const shippingBtn = modalCart.querySelector(".shipping-btn");
+  const couponBtn = modalCart.querySelector(".coupon-btn");
+  const notePopup = modalCart.querySelector(".note-block");
+  const shippingPopup = modalCart.querySelector(".shipping-block");
+  const couponPopup = modalCart.querySelector(".coupon-block");
+
   // note block
-  noteBtn?.addEventListener("click", () => {
-    notePopup.classList.toggle("active");
-  });
+  if (noteBtn && notePopup) {
+    noteBtn.addEventListener("click", () => {
+      notePopup.classList.toggle("active");
+    });
 
-  notePopup?.querySelector(".button-main")?.addEventListener("click", () => {
-    notePopup.classList.remove("active");
-  });
+    notePopup.querySelector(".button-main")?.addEventListener("click", () => {
+      notePopup.classList.remove("active");
+    });
 
-  notePopup?.querySelector(".cancel-btn")?.addEventListener("click", () => {
-    notePopup.classList.remove("active");
-  });
+    notePopup.querySelector(".cancel-btn")?.addEventListener("click", () => {
+      notePopup.classList.remove("active");
+    });
+  }
 
   // shipping block
-  shippingBtn?.addEventListener("click", () => {
-    shippingPopup.classList.toggle("active");
-  });
+  if (shippingBtn && shippingPopup) {
+    shippingBtn.addEventListener("click", () => {
+      shippingPopup.classList.toggle("active");
+    });
 
-  shippingPopup?.querySelector(".button-main")?.addEventListener("click", () => {
-    shippingPopup.classList.remove("active");
-  });
+    shippingPopup.querySelector(".button-main")?.addEventListener("click", () => {
+      shippingPopup.classList.remove("active");
+    });
 
-  shippingPopup?.querySelector(".cancel-btn")?.addEventListener("click", () => {
-    shippingPopup.classList.remove("active");
-  });
+    shippingPopup.querySelector(".cancel-btn")?.addEventListener("click", () => {
+      shippingPopup.classList.remove("active");
+    });
+  }
 
   // coupon block
-  couponBtn?.addEventListener("click", () => {
-    couponPopup.classList.toggle("active");
-  });
+  if (couponBtn && couponPopup) {
+    couponBtn.addEventListener("click", () => {
+      couponPopup.classList.toggle("active");
+    });
 
-  couponPopup?.querySelector(".button-main")?.addEventListener("click", () => {
-    couponPopup.classList.remove("active");
-  });
+    couponPopup.querySelector(".button-main")?.addEventListener("click", () => {
+      couponPopup.classList.remove("active");
+    });
 
-  couponPopup?.querySelector(".cancel-btn")?.addEventListener("click", () => {
-    couponPopup.classList.remove("active");
-  });
+    couponPopup.querySelector(".cancel-btn")?.addEventListener("click", () => {
+      couponPopup.classList.remove("active");
+    });
+  }
 }
 
 // sub-menu-department
