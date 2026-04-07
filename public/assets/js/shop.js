@@ -1086,18 +1086,76 @@ window.addEventToProductItem = function addEventToProductItem(products) { // Exp
         };
     });
 
-    // Add wishlist button functionality
+    // Add wishlist button functionality - PROPER IMPLEMENTATION with localStorage
     document.querySelectorAll('.add-wishlist-btn').forEach(button => {
+        // First, set initial state based on wishlistStore
+        const productElement = button.closest('.product-item');
+        const productId = productElement ? productElement.getAttribute('data-item') : null;
+        if (productId) {
+            let wishlistStore = localStorage.getItem("wishlistStore");
+            wishlistStore = wishlistStore ? JSON.parse(wishlistStore) : [];
+            const isInWishlist = wishlistStore.some(item => item.id === productId);
+            if (isInWishlist) {
+                button.classList.add('active');
+                const icon = button.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('ph');
+                    icon.classList.add('ph-fill');
+                }
+            }
+        }
+
         button.onclick = (e) => {
             e.preventDefault();
+            e.stopPropagation();
             const productElement = e.target.closest('.product-item');
             const productId = productElement ? productElement.getAttribute('data-item') : null;
-            if (productId) {
-                console.log('Added to wishlist:', productId);
-                // Toggle active class or change icon to indicate it's in wishlist
-                button.classList.toggle('active');
-                button.querySelector('.ph-heart').classList.toggle('ph-heart-fill'); // Assuming you have a filled heart icon
-                alert(`Product ${productId} added to wishlist!`);
+            
+            if (productId && products) {
+                let wishlistStore = localStorage.getItem("wishlistStore");
+                wishlistStore = wishlistStore ? JSON.parse(wishlistStore) : [];
+                
+                const existingIndex = wishlistStore.findIndex(item => item.id === productId);
+                const productToAdd = products.find(p => p.id === productId);
+                
+                if (existingIndex > -1) {
+                    // Remove from wishlist
+                    wishlistStore.splice(existingIndex, 1);
+                    button.classList.remove('active');
+                    const icon = button.querySelector('i');
+                    if (icon) {
+                        icon.classList.add('ph');
+                        icon.classList.remove('ph-fill');
+                    }
+                } else if (productToAdd) {
+                    // Add to wishlist
+                    wishlistStore.push(productToAdd);
+                    button.classList.add('active');
+                    const icon = button.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('ph');
+                        icon.classList.add('ph-fill');
+                    }
+                    // Open wishlist modal
+                    const modalWishlistMain = document.querySelector('.modal-wishlist-block .modal-wishlist-main');
+                    if (modalWishlistMain) {
+                        modalWishlistMain.classList.add('open');
+                    }
+                }
+                
+                // Save to localStorage
+                localStorage.setItem("wishlistStore", JSON.stringify(wishlistStore));
+                
+                // Update wishlist count badge
+                const wishlistIcon = document.querySelector('.wishlist-icon .wishlist-quantity');
+                if (wishlistIcon) {
+                    wishlistIcon.innerHTML = wishlistStore.length;
+                }
+                
+                // Update wishlist side panel if function exists
+                if (typeof window.handleItemModalWishlist === 'function') {
+                    window.handleItemModalWishlist();
+                }
             }
         };
     });

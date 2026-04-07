@@ -340,28 +340,15 @@ const closeModalWishlist = () => {
   modalWishlistMain.classList.remove("open");
 };
 
-addWishlistBtns.forEach((addWishlistBtn) => {
-  addWishlistBtn.addEventListener("click", (e) => {
-    e.stopPropagation();
-    addWishlistBtn.classList.toggle("active");
+// Remove conflicting event listener - the proper implementation is in addEventToProductItem
+// and shop.js
 
-    if (addWishlistBtn.classList.contains("active")) {
-      addWishlistBtn.querySelector("i").classList.remove("ph");
-      addWishlistBtn.querySelector("i").classList.add("ph-fill");
-      openModalWishlist();
-    } else {
-      addWishlistBtn.querySelector("i").classList.add("ph");
-      addWishlistBtn.querySelector("i").classList.remove("ph-fill");
-    }
-  });
-});
+wishlistIcon?.addEventListener("click", openModalWishlist);
+modalWishlist?.addEventListener("click", closeModalWishlist);
+closeWishlistIcon?.addEventListener("click", closeModalWishlist);
+continueWishlistIcon?.addEventListener("click", closeModalWishlist);
 
-wishlistIcon.addEventListener("click", openModalWishlist);
-modalWishlist.addEventListener("click", closeModalWishlist);
-closeWishlistIcon.addEventListener("click", closeModalWishlist);
-continueWishlistIcon.addEventListener("click", closeModalWishlist);
-
-modalWishlistMain.addEventListener("click", (e) => {
+modalWishlistMain?.addEventListener("click", (e) => {
   e.stopPropagation();
 });
 
@@ -467,6 +454,9 @@ const updateWishlistIcons = () => {
 
 handleItemModalWishlist();
 
+// Expose handleItemModalWishlist globally for shop.js
+window.handleItemModalWishlist = handleItemModalWishlist;
+
 // Modal Cart
 const cartIcon = document.querySelector(".cart-icon");
 const modalCart = document.querySelector(".modal-cart-block");
@@ -491,12 +481,12 @@ addCartBtns.forEach((item) => {
   });
 });
 
-cartIcon.addEventListener("click", openModalCart);
-modalCart.addEventListener("click", closeModalCart);
-closeCartIcon.addEventListener("click", closeModalCart);
-continueCartIcon.addEventListener("click", closeModalCart);
+cartIcon?.addEventListener("click", openModalCart);
+modalCart?.addEventListener("click", closeModalCart);
+closeCartIcon?.addEventListener("click", closeModalCart);
+continueCartIcon?.addEventListener("click", closeModalCart);
 
-modalCartMain.addEventListener("click", (e) => {
+modalCartMain?.addEventListener("click", (e) => {
   e.stopPropagation();
 });
 
@@ -641,41 +631,41 @@ const couponPopup = modalCart.querySelector(".coupon-block");
 
 if (modalCart) {
   // note block
-  noteBtn.addEventListener("click", () => {
+  noteBtn?.addEventListener("click", () => {
     notePopup.classList.toggle("active");
   });
 
-  notePopup.querySelector(".button-main").addEventListener("click", () => {
+  notePopup?.querySelector(".button-main")?.addEventListener("click", () => {
     notePopup.classList.remove("active");
   });
 
-  notePopup.querySelector(".cancel-btn").addEventListener("click", () => {
+  notePopup?.querySelector(".cancel-btn")?.addEventListener("click", () => {
     notePopup.classList.remove("active");
   });
 
   // shipping block
-  shippingBtn.addEventListener("click", () => {
+  shippingBtn?.addEventListener("click", () => {
     shippingPopup.classList.toggle("active");
   });
 
-  shippingPopup.querySelector(".button-main").addEventListener("click", () => {
+  shippingPopup?.querySelector(".button-main")?.addEventListener("click", () => {
     shippingPopup.classList.remove("active");
   });
 
-  shippingPopup.querySelector(".cancel-btn").addEventListener("click", () => {
+  shippingPopup?.querySelector(".cancel-btn")?.addEventListener("click", () => {
     shippingPopup.classList.remove("active");
   });
 
   // coupon block
-  couponBtn.addEventListener("click", () => {
+  couponBtn?.addEventListener("click", () => {
     couponPopup.classList.toggle("active");
   });
 
-  couponPopup.querySelector(".button-main").addEventListener("click", () => {
+  couponPopup?.querySelector(".button-main")?.addEventListener("click", () => {
     couponPopup.classList.remove("active");
   });
 
-  couponPopup.querySelector(".cancel-btn").addEventListener("click", () => {
+  couponPopup?.querySelector(".cancel-btn")?.addEventListener("click", () => {
     couponPopup.classList.remove("active");
   });
 }
@@ -1110,8 +1100,8 @@ const closeModalCompare = () => {
   modalCompareMain.classList.remove("open");
 };
 
-closeCompareIcon.addEventListener("click", closeModalCompare);
-clearCompareIcon.addEventListener("click", closeModalCompare);
+closeCompareIcon?.addEventListener("click", closeModalCompare);
+clearCompareIcon?.addEventListener("click", closeModalCompare);
 
 // Set compare length
 const handleItemModalCompare = () => {
