@@ -1178,7 +1178,7 @@ const handleItemModalCompare = () => {
       prdItem.innerHTML = `
                 <div class="infor flex items-center gap-4">
                     <div class="bg-img w-[100px] h-[100px] flex-shrink-0 rounded-lg overflow-hidden">
-                        <img src=${item.thumbImage[0]} alt='img'
+                        <img src=${item.thumbImage?.[0] || '/assets/images/product/productDefault.png'} alt='img'
                             class='w-full h-full' />
                     </div>
                     <div class=''>
@@ -1276,9 +1276,14 @@ const handleItemModalQuickview = () => {
     modalQuickviewMain.setAttribute("data-item", item.id);
 
     const listImg = modalQuickviewMain.querySelector(".list-img");
+    if (!listImg) return;
+    
+    // Safely get images array
+    const productImages = item.images || item.thumbImage || [];
+    
     listImg.innerHTML = `
-      ${item.images
-        .map(
+      ${productImages.length > 0
+        ? productImages.map(
           (img) =>
             `
         <div class="bg-img w-full aspect-[3/4] max-md:w-[150px] max-md:flex-shrink-0 rounded-[20px] overflow-hidden md:mt-6">
@@ -1289,8 +1294,11 @@ const handleItemModalQuickview = () => {
           />
         </div>
         `
-        )
-        .join("")}
+        ).join("")
+        : `<div class="bg-img w-full aspect-[3/4] max-md:w-[150px] max-md:flex-shrink-0 rounded-[20px] overflow-hidden md:mt-6">
+          <img src="/assets/images/product/productDefault.png" alt="item" class="w-full h-full object-cover" />
+        </div>`
+      }
     `;
 
     modalQuickviewMain.querySelector(".product-infor .category").innerHTML =
@@ -1532,9 +1540,11 @@ const createProductItem = (product) => {
   }
 
   let productImages = "";
-  product.thumbImage.forEach((img, index) => {
-    productImages += `<img key="${index}" class="w-full h-full object-cover duration-700 bg-card" src="${img}" alt="img">`;
-  });
+  if (product.thumbImage && Array.isArray(product.thumbImage)) {
+    product.thumbImage.forEach((img, index) => {
+      productImages += `<img key="${index}" class="w-full h-full object-cover duration-700 bg-card" src="${img}" alt="img">`;
+    });
+  }
 
   // ✅ FIX: Show color names instead of color codes
   const formatColorVariation = (variation) => {
